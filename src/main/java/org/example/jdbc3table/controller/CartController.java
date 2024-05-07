@@ -1,6 +1,7 @@
 package org.example.jdbc3table.controller;
 
 import org.example.jdbc3table.model.Cart;
+import org.example.jdbc3table.model.DTO.CartDTO;
 import org.example.jdbc3table.model.Product;
 import org.example.jdbc3table.model.User;
 import org.example.jdbc3table.service.cart.CartService;
@@ -27,13 +28,33 @@ public class CartController extends HttpServlet {
     private ICartService cartService = new CartService();
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        int id = Integer.parseInt(req.getParameter("id"));
-        Product product = productService.selectById(id);
-        List<User> lists = userService.selectAll();
-        req.setAttribute("product", product);
-        req.setAttribute("users", lists);
-        RequestDispatcher dispatcher = req.getRequestDispatcher("order.jsp");
-        dispatcher.forward(req, resp);
+        String idP = req.getParameter("id");
+        if (idP==null){
+            showAllCartDTO(req, resp);
+        }
+        else {
+            int id = Integer.parseInt(idP);
+            Product product = productService.selectById(id);
+            List<User> lists = userService.selectAll();
+            req.setAttribute("product", product);
+            req.setAttribute("users", lists);
+            RequestDispatcher dispatcher = req.getRequestDispatcher("order.jsp");
+            dispatcher.forward(req, resp);
+        }
+    }
+
+    private void showAllCartDTO(HttpServletRequest req, HttpServletResponse resp) {
+        List<CartDTO> cartDTOS = cartService.showAllCart();
+        req.setAttribute("carts", cartDTOS);
+        RequestDispatcher requestDispatcher = req.getRequestDispatcher("list.jsp");
+        try {
+            requestDispatcher.forward(req, resp);
+        } catch (ServletException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     @Override

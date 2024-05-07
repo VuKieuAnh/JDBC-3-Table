@@ -1,11 +1,15 @@
 package org.example.jdbc3table.service.cart;
 
 import org.example.jdbc3table.model.Cart;
+import org.example.jdbc3table.model.DTO.CartDTO;
+import org.example.jdbc3table.model.Product;
 import org.example.jdbc3table.service.ConnectionDB;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CartService implements ICartService {
@@ -43,5 +47,25 @@ public class CartService implements ICartService {
     @Override
     public boolean update(Cart user) throws SQLException {
         return false;
+    }
+
+    @Override
+    public List<CartDTO> showAllCart() {
+        List<CartDTO> cartDTOS = new ArrayList<>();
+        try {
+            PreparedStatement statement = connection.prepareStatement("select cart.id, u.name as user, p.name as productname, cart.number from cart join product_manager_c0124i1.product p on p.id = cart.id_product join product_manager_c0124i1.user u on u.id = cart.id_user;");
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()){
+                int id = resultSet.getInt("id");
+                String user = resultSet.getString("user");
+                int number = resultSet.getInt("number");
+                String productname = resultSet.getString("productname");
+                CartDTO product = new CartDTO(id, user, productname, number);
+                cartDTOS.add(product);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return cartDTOS;
     }
 }
