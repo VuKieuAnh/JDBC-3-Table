@@ -6,6 +6,9 @@ public class CartDTO {
     private String productname;
     private int number;
 
+    public CartDTO() {
+    }
+
     public CartDTO(int id, String user, String productname, int number) {
         this.id = id;
         this.user = user;

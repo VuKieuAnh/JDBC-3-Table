@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface ICartService extends IGenericService<Cart> {
     List<CartDTO> showAllCart();
+    CartDTO findByID(int id);
 }

@@ -2,23 +2,23 @@ package org.example.jdbc3table.model;
 
 public class Cart {
     private int id;
-    private Product product;
-    private User user;
+    private int product_id;
+    private int user_id;
     private int number;
 
     public Cart() {
     }
 
-    public Cart(Product product, User user, int number) {
-        this.product = product;
-        this.user = user;
+    public Cart(int id, int product_id, int user_id, int number) {
+        this.id = id;
+        this.product_id = product_id;
+        this.user_id = user_id;
         this.number = number;
     }
 
-    public Cart(int id, Product product, User user, int number) {
-        this.id = id;
-        this.product = product;
-        this.user = user;
+    public Cart(int product_id, int user_id, int number) {
+        this.product_id = product_id;
+        this.user_id = user_id;
         this.number = number;
     }
 
@@ -30,20 +30,20 @@ public class Cart {
         this.id = id;
     }
 
-    public Product getProduct() {
-        return product;
+    public int getProduct_id() {
+        return product_id;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
+    public void setProduct_id(int product_id) {
+        this.product_id = product_id;
     }
 
-    public User getUser() {
-        return user;
+    public int getUser_id() {
+        return user_id;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser_id(int user_id) {
+        this.user_id = user_id;
     }
 
     public int getNumber() {

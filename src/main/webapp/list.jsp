@@ -19,6 +19,7 @@
         <td>user</td>
         <td>productname</td>
         <td>number</td>
+        <td>edit</td>
     </tr>
     <c:forEach var="p" items="${carts}">
         <tr>
@@ -26,6 +27,7 @@
             <td>${p.user}</td>
             <td>${p.productname}</td>
             <td>${p.number}</td>
+            <td><a href="/order?action=edit&id=${p.id}">Edit</a></td>
         </tr>
     </c:forEach>
 </table>

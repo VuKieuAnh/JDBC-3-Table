@@ -29,6 +29,20 @@ public class CartController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String idP = req.getParameter("id");
+        String action = req.getParameter("action");
+        if (action==null){
+            showAllCartDTO(req, resp);
+        }
+        else {
+            switch (action){
+                case "edit":
+                    showFormEdit(req, resp);
+                    break;
+                default:
+                    showAllCartDTO(req, resp);
+
+            }
+        }
         if (idP==null){
             showAllCartDTO(req, resp);
         }
@@ -40,6 +54,20 @@ public class CartController extends HttpServlet {
             req.setAttribute("users", lists);
             RequestDispatcher dispatcher = req.getRequestDispatcher("order.jsp");
             dispatcher.forward(req, resp);
+        }
+    }
+
+    private void showFormEdit(HttpServletRequest req, HttpServletResponse resp) {
+        int id = Integer.parseInt( req.getParameter("id"));
+        CartDTO cartDTO = cartService.findByID(id);
+        req.setAttribute("cart", cartDTO);
+        RequestDispatcher dispatcher = req.getRequestDispatcher("edit.jsp");
+        try {
+            dispatcher.forward(req, resp);
+        } catch (ServletException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -59,21 +87,37 @@ public class CartController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//       lay thong tin
+        String action = req.getParameter("action");
+        if (action==null){
+            //       lay thong tin
 //        id product
-        int productId = Integer.parseInt(req.getParameter("id"));
+            int productId = Integer.parseInt(req.getParameter("id"));
 //        id user
-        int userId = Integer.parseInt(req.getParameter("userid"));
+            int userId = Integer.parseInt(req.getParameter("userid"));
 //        number
-        int number = Integer.parseInt(req.getParameter("number"));
+            int number = Integer.parseInt(req.getParameter("number"));
 //        b1: ghi vao db
-        User user = new User(userId);
-        Product product = new Product(productId);
-        Cart c = new Cart(product, user, number);
-        try {
-            cartService.insert(c);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            Cart c = new Cart(productId, userId, number);
+            try {
+                cartService.insert(c);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
+        else {
+            //        number
+            int number = Integer.parseInt(req.getParameter("number"));
+            int id = Integer.parseInt(req.getParameter("id"));
+            Cart cart = new Cart();
+            cart.setId(id);
+            cart.setNumber(id);
+            try {
+                cartService.update(cart);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+
     }
 }
